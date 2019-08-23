@@ -1,0 +1,14 @@
+---
+boost_version: 1.67.0
+zlib_version: 1.2.11
+bzip2_version: 1.0.6
+boost_prefix: "C:/Local"
+boost_workdir: "C:/tmp/boost"
+boost_file_name: "boost_{{ boost_version.replace('.', '_') }}-msvc-14.0-64"
+boost_install_dir: "C:/boost/{{ boost_file_name }}"
+boost_file_name_exe: "{{ boost_file_name }}.exe"
+
+# Bintray
+boost_format: zip
+boost_branch: release
+compile_boost: true
