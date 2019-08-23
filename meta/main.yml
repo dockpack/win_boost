@@ -1,0 +1,23 @@
+---
+
+galaxy_info:
+  author: bbaassssiiee
+  description: Boost libraries for C++
+  company:
+
+  license: MIT
+
+  min_ansible_version: 2.7.0
+
+  platforms:
+    - name: Windows
+      versions:
+      - all
+      - 2016
+  galaxy_tags:
+    - system
+    - development
+    - buildserver
+    - windows
+
+dependencies: []
