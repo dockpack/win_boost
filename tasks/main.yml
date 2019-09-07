@@ -181,15 +181,6 @@
     - b2
     - boost
 
-- name: run b2 install for boost
-  win_shell: "cmd.exe /c b2 install --prefix={{ boost_install_dir }}"
-  args:
-    chdir: "{{ boost_dir }}"
-  when: compile_boost|bool
-  tags:
-    - boost_install
-    - boost
-
 - name: add boost root to system environment
   win_environment:
     name: BOOST_ROOT
