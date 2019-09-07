@@ -168,14 +168,23 @@
     - b2
     - boost
 
-- name: run b2 for boost
-  win_shell: "cmd.exe /c b2 {{ compile_boost_with }} {{ boost_properties }} ^
-      --build-type=minimal -j{{ ansible_processor_vcpus }} ^
-      stage --stagedir=stage/lib64-msvc-14.1 ^
-      -sBZIP2_SOURCE='{{ boost_prefix }}/bzip2-{{ bzip2_version }}' ^
+- name: run b2 for boost compilation
+  win_shell: "cmd.exe /c b2 {{ compile_boost_with }}
+      toolset={{ item.toolset }}
+      address-model={{ item.address_model }}
+      architecture={{ item.architecture }}
+      link={{ item.link }}
+      threading={{ item.threading }}
+      runtime-link={{ item.runtime_link }}
+      --build-type=minimal -j{{ ansible_processor_vcpus }}
+      stage --stagedir=stage/lib{{ item.address_model }}-{{ item.toolset }}
+      -sBZIP2_SOURCE='{{ boost_prefix }}/bzip2-{{ bzip2_version }}'
       -sZLIB_SOURCE='{{ boost_prefix }}/zlib-{{ zlib_version }}'"
   args:
     chdir: "{{ boost_dir }}"
+    creates: "stage/lib{{ item.address_model }}-{{ item.toolset }}"
+  with_items:
+    - "{{ boost_set }}"
   when: compile_boost|bool
   tags:
     - b2

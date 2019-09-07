@@ -5,16 +5,29 @@ bzip2_version: 1.0.6
 boost_prefix: "C:/Local"
 boost_workdir: "C:/tmp/boost"
 boost_dir: "{{ boost_prefix }}/boost_{{ boost_version.replace('.', '_')  }}"
-boost_file_name: "boost_{{ boost_version.replace('.', '_') }}-msvc-14.0-64"
+boost_file_name: "boost_{{ boost_version.replace('.', '_') }}-msvc-14.1-64"
 boost_install_dir: "C:/boost/{{ boost_file_name }}"
 boost_file_name_exe: "{{ boost_file_name }}.exe"
 
 # Bintray
 boost_format: zip
 boost_branch: release
-boost_properties: 'toolset=msvc-14.1 address-model=64 architecture=x86 link=static threading=multi runtime-link=shared'
+boost_set:
+  - address_model: 64
+    architecture: x86
+    link: static
+    runtime_link: shared
+    threading: multi
+    toolset: 'msvc-14.1'
+  - address_model: 32
+    architecture: x86
+    link: static
+    runtime_link: shared
+    threading: multi
+    toolset: 'msvc-14.1'
+
 boost_variant: release
-clean_boost: false
+clean_boost: true
 compile_boost: true
 
 compile_boost_with:
