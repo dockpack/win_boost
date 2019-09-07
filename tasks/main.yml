@@ -37,6 +37,8 @@
   until: download_zlib is succeeded
   retries: 10
   delay: 2
+  tags:
+    - zlib
 
 - name: gunzip lzib source
   win_unzip:
@@ -45,6 +47,8 @@
     delete_archive: true
     creates: "{{ boost_prefix }}/zlib-{{ zlib_version }}.tar"
     copy: false
+  tags:
+    - zlib
 
 - name: untar lzib source
   win_unzip:
@@ -53,6 +57,8 @@
     delete_archive: true
     creates: "{{ boost_prefix }}/zlib-{{ zlib_version }}"
     copy: false
+  tags:
+    - zlib
 
 - name: download bzip2 source
   win_get_url:
@@ -63,6 +69,8 @@
   until: download_bzip2 is succeeded
   retries: 10
   delay: 2
+  tags:
+    - bzip2
 
 - name: unpack bzip2 source
   win_unzip:
@@ -72,6 +80,8 @@
     recurse: true
     creates: "{{ boost_prefix }}/bzip2-{{ bzip2_version }}"
     copy: false
+  tags:
+    - bzip2
 
 - name: cleanup temporary files
   win_file:
@@ -81,6 +91,9 @@
     - sample1.tar
     - sample2.tar
     - sample3.tar
+  tags:
+    - zlib
+    - bzip2
 
 - name: download boost source
   when: compile_boost|bool
@@ -91,46 +104,101 @@
   until: download_boost is succeeded
   retries: 10
   delay: 2
+  tags:
+    - boost
 
 - name: unpack boost source
   win_unzip:
     src: "{{ download_boost.dest }}"
     dest: "{{ boost_prefix }}"
     delete_archive: true
-    creates: "{{ boost_prefix }}/boost-{{ boost_version }}"
+    creates: "{{ boost_dir }}"
     copy: false
+  tags:
+    - boost
 
 - name: verify install
   win_stat:
     path: "{{ boost_install_dir }}/libs"
   when: not compile_boost|bool
   register: boost_librarydir
+  tags:
+    - boost
 
-- name: Create install directory
+- name: create install directory
   win_file:
     path: "{{ boost_install_dir }}"
     state: directory
   when: not compile_boost|bool and not boost_librarydir.stat.exists
+  tags:
+    - boost
 
-- name: Get boost binary
+- name: get boost binary
   win_get_url:
     url: "{{ boost_bin }}"
     dest: "{{ boost_workdir }}/{{ boost_file_name_exe }}"
   when: not compile_boost|bool
+  tags:
+    - boost
 
-- name: Install boost
+- name: install boost
   win_shell: "cmd.exe /c {{ boost_file_name_exe }} /DIR='{{ boost_install_dir }}' /SILENT /NOCANCEL"
   args:
     chdir: "{{ boost_workdir }}"
   when: not compile_boost|bool
+  tags:
+    - boost
 
-- name: Add boost root to system environment
+- name: bootstrap boost
+  win_shell: "cmd.exe /c bootstrap"
+  args:
+    chdir: "{{ boost_dir }}"
+    creates: "{{ boost_dir }}/project-config.jam"
+  when: compile_boost|bool
+  tags:
+    - bootstrap
+    - boost
+
+- name: clean b2 for boost
+  win_shell: "cmd.exe /c b2 --clean"
+  args:
+    chdir: "{{ boost_dir }}"
+  when: compile_boost|bool and clean_boost|bool
+  tags:
+    - b2
+    - boost
+
+- name: run b2 for boost
+  win_shell: "cmd.exe /c b2 {{ compile_boost_with }} {{ boost_properties }} ^
+      --build-type=minimal -j{{ ansible_processor_vcpus }} ^
+      stage --stagedir=stage/lib64-msvc-14.1 ^
+      -sBZIP2_SOURCE='{{ boost_prefix }}/bzip2-{{ bzip2_version }}' ^
+      -sZLIB_SOURCE='{{ boost_prefix }}/zlib-{{ zlib_version }}'"
+  args:
+    chdir: "{{ boost_dir }}"
+  when: compile_boost|bool
+  tags:
+    - b2
+    - boost
+
+- name: run b2 install for boost
+  win_shell: "cmd.exe /c b2 install --prefix={{ boost_install_dir }}"
+  args:
+    chdir: "{{ boost_dir }}"
+  when: compile_boost|bool
+  tags:
+    - boost_install
+    - boost
+
+- name: add boost root to system environment
   win_environment:
     name: BOOST_ROOT
     value: "{{ boost_install_dir }}"
     level: machine
     state: present
   when: not compile_boost|bool
+  tags:
+    - boost
 
 - name: Add boost library directory to system environment
   win_environment:
@@ -139,6 +207,8 @@
     level: machine
     state: present
   when: not compile_boost|bool
+  tags:
+    - boost
 
 - name: Cleanup
   win_file:
