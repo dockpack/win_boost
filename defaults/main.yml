@@ -1,5 +1,7 @@
 ---
-boost_version: 1.67.0
+# Run the role with these vars
+# toolset: 'msvc-14.1'
+# boost_version: 1.67.0
 zlib_version: 1.2.11
 bzip2_version: 1.0.6
 boost_prefix: "C:/Local"
@@ -18,13 +20,11 @@ boost_set:
     link: static
     runtime_link: shared
     threading: multi
-    toolset: 'msvc-14.1'
   - address_model: 32
     architecture: x86
     link: static
     runtime_link: shared
     threading: multi
-    toolset: 'msvc-14.1'
 
 boost_variant: release
 clean_boost: true
