@@ -1,5 +1,12 @@
 ---
 
+- name: Configure my toolset
+  set_fact:
+    my_toolset: "{{ toolset }}"
+  tags:
+    - boost
+    - b2
+
 - name: Ensure the required NuGet package provider version is installed
   win_shell: Find-PackageProvider -Name Nuget -ForceBootstrap -IncludeDependencies -Force
 
@@ -170,19 +177,19 @@
 
 - name: run b2 for boost compilation
   win_shell: "cmd.exe /c b2 {{ compile_boost_with }}
-      toolset={{ item.toolset }}
+      --build-type=minimal -j{{ ansible_processor_vcpus }}
+      toolset={{ my_toolset }}
       address-model={{ item.address_model }}
       architecture={{ item.architecture }}
       link={{ item.link }}
       threading={{ item.threading }}
       runtime-link={{ item.runtime_link }}
-      --build-type=minimal -j{{ ansible_processor_vcpus }}
-      stage --stagedir=stage/lib{{ item.address_model }}-{{ item.toolset }}
+      stage --stagedir=stage/lib{{ item.address_model }}-{{ my_toolset }}
       -sBZIP2_SOURCE='{{ boost_prefix }}/bzip2-{{ bzip2_version }}'
       -sZLIB_SOURCE='{{ boost_prefix }}/zlib-{{ zlib_version }}'"
   args:
     chdir: "{{ boost_dir }}"
-    creates: "stage/lib{{ item.address_model }}-{{ item.toolset }}"
+    creates: "stage/lib{{ item.address_model }}-{{ my_toolset }}"
   with_items:
     - "{{ boost_set }}"
   when: compile_boost|bool
