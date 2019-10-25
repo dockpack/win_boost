@@ -4,8 +4,8 @@
 # boost_version: 1.67.0
 zlib_version: 1.2.11
 bzip2_version: 1.0.6
-boost_prefix: "C:/Local"
-boost_workdir: "C:/tmp/boost"
+boost_prefix: 'C:/Local'
+boost_workdir: 'C:/tmp/boost'
 boost_dir: "{{ boost_prefix }}/boost_{{ boost_version.replace('.', '_')  }}"
 boost_file_name: "boost_{{ boost_version.replace('.', '_') }}-msvc-14.1-64"
 boost_install_dir: "C:/boost/{{ boost_file_name }}"
