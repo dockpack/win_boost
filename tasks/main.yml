@@ -177,14 +177,14 @@
 
 - name: run b2 for boost compilation
   win_shell: "cmd.exe /c b2 {{ compile_boost_with }}
-      --build-type=minimal -j{{ ansible_processor_vcpus }}
+      --build-type=minimal -j{{ ansible_processor_vcpus|default('2') }}
       toolset={{ my_toolset }}
       address-model={{ item.address_model }}
       architecture={{ item.architecture }}
       link={{ item.link }}
       threading={{ item.threading }}
       runtime-link={{ item.runtime_link }}
-      stage --stagedir=stage/lib{{ item.address_model }}-{{ my_toolset }}
+      stage --stagedir=stage/lib{{ item.address_model }}-{{ item.toolset }}
       -sBZIP2_SOURCE='{{ boost_prefix }}/bzip2-{{ bzip2_version }}'
       -sZLIB_SOURCE='{{ boost_prefix }}/zlib-{{ zlib_version }}'"
   args:
