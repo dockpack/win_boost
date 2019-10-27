@@ -1,11 +1,14 @@
 ---
-boost_baseurl: "https://dl.bintray.com/boostorg/{{ boost_branch }}"
+boost_site: "https://dl.bintray.com/boostorg/{{ boost_branch }}"
 boost_dest: "boost_{{ boost_version| replace('.','_') }}"
-boost_url: "{{ boost_baseurl }}/{{ boost_version }}/source/{{ boost_dest }}.{{ boost_format }}"
-boost_bin: "{{ boost_baseurl }}/{{ boost_version }}/binaries/{{ boost_file_name_exe }}"
+# yamllint disable-line rule:line-length
+boost_url: "{{ boost_site }}/{{ boost_version }}/source/{{ boost_dest }}.{{ boost_format }}"
+# yamllint disable-line rule:line-length
+boost_bin: "{{ boost_site }}/{{ boost_version }}/binaries/{{ boost_file_name_exe }}"
 
 zlib_lib: "zlib-{{ zlib_version }}"
 zlib_archive: "{{ zlib_lib }}.tar.gz"
 zlib_url: "http://zlib.net/{{ zlib_archive }}"
-
-bzip2_url: "https://www.sourceware.org/pub/bzip2/bzip2-{{ bzip2_version }}.tar.gz"
+bzip2_site: "https://www.sourceware.org/pub/bzip2"
+bzip2_file: "bzip2-{{ bzip2_version }}.tar.gz"
+bzip2_url: "{{ bzip2_site }}/{{ bzip2_file }}"
