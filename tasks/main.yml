@@ -8,6 +8,7 @@
     - b2
 
 - name: Ensure the required NuGet package provider version is installed
+  # yamllint disable-line rule:line-length
   win_shell: Find-PackageProvider -Name Nuget -ForceBootstrap -IncludeDependencies -Force
 
 - name: Install PowerShell Community Extensions
@@ -149,6 +150,7 @@
     - boost
 
 - name: install boost
+  # yamllint disable-line rule:line-length
   win_shell: "cmd.exe /c {{ boost_file_name_exe }} /DIR='{{ boost_install_dir }}' /SILENT /NOCANCEL"
   args:
     chdir: "{{ boost_workdir }}"
