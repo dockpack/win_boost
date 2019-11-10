@@ -122,6 +122,8 @@
     delete_archive: true
     creates: "{{ boost_dir }}"
     copy: false
+  async: 600
+  poll: 60
   tags:
     - boost
 
@@ -189,6 +191,8 @@
       stage --stagedir=stage/lib{{ item.address_model }}-{{ my_toolset }}
       -sBZIP2_SOURCE='{{ boost_prefix }}/bzip2-{{ bzip2_version }}'
       -sZLIB_SOURCE='{{ boost_prefix }}/zlib-{{ zlib_version }}'"
+  async: 300
+  poll: 60
   args:
     chdir: "{{ boost_dir }}"
     creates: "stage/lib{{ item.address_model }}-{{ my_toolset }}"
