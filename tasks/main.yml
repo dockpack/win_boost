@@ -103,17 +103,29 @@
     - zlib
     - bzip2
 
+- name: get boost download url
+  when: compile_boost|bool
+  win_uri:
+    url: "{{ boost_url }}"
+    follow_redirects: none
+    status_code: 302
+  register: uri_output
+  tags:
+    - boost
+    - download_boost
+
 - name: download boost source
   when: compile_boost|bool
   win_get_url:
-    url: "{{ boost_url }}"
-    dest: "{{ boost_workdir }}"
+    url: "{{ uri_output.location }}"
+    dest: "{{ boost_workdir }}/{{ boost_dest }}.zip"
   register: download_boost
   until: download_boost is succeeded
   retries: 10
   delay: 2
   tags:
     - boost
+    - download_boost
 
 - name: unpack boost source
   win_unzip:
@@ -126,6 +138,7 @@
   poll: 60
   tags:
     - boost
+    - download_boost
 
 - name: verify install
   win_stat:
