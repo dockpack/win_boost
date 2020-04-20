@@ -41,17 +41,7 @@
     src: "{{ download_zlib.dest }}"
     dest: "{{ boost_prefix }}"
     delete_archive: true
-    creates: "{{ boost_prefix }}/zlib-{{ zlib_version }}.tar"
-    copy: false
-  tags:
-    - zlib
-
-- name: untar lzib source
-  win_unzip:
-    src: "{{ boost_prefix }}/zlib-{{ zlib_version }}.tar"
-    dest: "{{ boost_prefix }}"
-    delete_archive: true
-    creates: "{{ boost_prefix }}/zlib-{{ zlib_version }}"
+    creates: "{{ boost_prefix }}/zlib-{{ zlib_version }}/contrib"
     copy: false
   tags:
     - zlib
@@ -69,7 +59,7 @@
     - bzip2
 
 - name: unpack bzip2 source
-  win_shell: '7z x "{{ download_bzip2.dest }}" -so | 7z x -aoa -si -ttar -o"{{ boost_prefix }}"'
+  win_shell: '7z x -r "{{ download_bzip2.dest }}" -so | 7z x -aoa -si -ttar -o"{{ boost_prefix }}"'
   args:
     creates: "{{ boost_prefix }}/bzip2-{{ bzip2_version }}"
     chdir: "{{ boost_workdir }}"
