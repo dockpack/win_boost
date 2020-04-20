@@ -7,17 +7,7 @@
     - boost
     - b2
 
-- name: Ensure the required NuGet package provider version is installed
-  # yamllint disable-line rule:line-length
-  win_shell: Find-PackageProvider -Name Nuget -ForceBootstrap -IncludeDependencies -Force
-
-- name: Install PowerShell Community Extensions
-  win_psmodule:
-    name: Pscx
-    state: present
-    allow_clobber: true
-
-- name: Install utilities
+- name: Just install 7zip instead of Pscx to deal with tar.gz
   win_chocolatey:
     name: "{{ item }}"
     state: present
@@ -48,7 +38,7 @@
   tags:
     - zlib
 
-- name: gunzip lzib source
+- name: unzip lzib source
   win_unzip:
     src: "{{ download_zlib.dest }}"
     dest: "{{ boost_prefix }}"
@@ -81,13 +71,10 @@
     - bzip2
 
 - name: unpack bzip2 source
-  win_unzip:
-    src: "{{ download_bzip2.dest }}"
-    dest: "{{ boost_prefix }}"
-    delete_archive: true
-    recurse: true
+  win_shell: '7z x "{{ download_bzip2.dest }}" -so | 7z x -aoa -si -ttar -o"{{ boost_prefix }}"'
+  args:
     creates: "{{ boost_prefix }}/bzip2-{{ bzip2_version }}"
-    copy: false
+    chdir: "{{ boost_workdir }}"
   tags:
     - bzip2
 

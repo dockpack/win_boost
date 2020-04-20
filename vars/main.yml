@@ -6,8 +6,8 @@ boost_url: "{{ boost_site }}/{{ boost_version }}/source/{{ boost_dest }}.{{ boos
 # yamllint disable-line rule:line-length
 boost_bin: "{{ boost_site }}/{{ boost_version }}/binaries/{{ boost_file_name_exe }}"
 
-zlib_lib: "zlib-{{ zlib_version }}"
-zlib_archive: "{{ zlib_lib }}.tar.gz"
+zlib_lib: "zlib{{ zlib_version.replace('.', '')  }}"
+zlib_archive: "{{ zlib_lib }}.zip"
 zlib_url: "http://zlib.net/{{ zlib_archive }}"
 bzip2_site: "https://www.sourceware.org/pub/bzip2"
 bzip2_file: "bzip2-{{ bzip2_version }}.tar.gz"
