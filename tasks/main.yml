@@ -36,7 +36,7 @@
   tags:
     - zlib
 
-- name: unzip lzib source
+- name: unzip zlib source
   win_unzip:
     src: "{{ download_zlib.dest }}"
     dest: "{{ boost_prefix }}"
