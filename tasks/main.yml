@@ -9,10 +9,8 @@
 
 - name: Just install 7zip instead of Pscx to deal with tar.gz
   win_chocolatey:
-    name: "{{ item }}"
+    name: 7zip.install
     state: present
-  with_items:
-    - 7zip.install
   register: install_7zip
   until: install_7zip is succeeded
   retries: 10
