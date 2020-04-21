@@ -59,7 +59,7 @@
     - bzip2
 
 - name: gunzip bzip2 source
-  win_shell: '7z x "{{ download_bzip2.dest }}" -o"{{ boost_workdir }}"'
+  win_shell: '7z x -y "{{ download_bzip2.dest }}" -o"{{ boost_workdir }}"'
   args:
     creates: "{{ boost_prefix }}/bzip2-{{ bzip2_version }}.tar"
     chdir: "{{ boost_workdir }}"
