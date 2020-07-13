@@ -67,6 +67,7 @@
     - bzip2
 
 - name: untar bzip2 source
+  # yamllint disable-line rule:line-length
   win_shell: '7z x -aoa -ttar -r -o"{{ boost_prefix }}" "{{ boost_workdir }}/bzip2-{{ bzip2_version }}.tar"'
 
 - name: cleanup temporary files
