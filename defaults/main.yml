@@ -36,3 +36,5 @@ compile_boost_with:
   --with-iostreams
   --with-regex
   --with-program_options
+boost_cflags: '/GR-'
+boost_cxxflags: '/GR-'

@@ -180,6 +180,8 @@
       link={{ item.link }}
       threading={{ item.threading }}
       runtime-link={{ item.runtime_link }}
+      cflags={{ boost_cflags }}
+      cxxflags={{ boost_cxxflags }}
       stage --stagedir=stage/lib{{ item.address_model }}-{{ my_toolset }}
       -sBZIP2_SOURCE='{{ boost_prefix }}/bzip2-{{ bzip2_version }}'
       -sZLIB_SOURCE='{{ boost_prefix }}/zlib-{{ zlib_version }}'"
