@@ -1,5 +1,10 @@
-# win_boost
-Ansible role to install and compile Boost C++ libraries on Windows
+# win_boost (deprecated)
+Ansible role to install and compile Boost C++ libraries on Windows.
+
+# base_boost implements windows and linux.
+```
+ansible-galaxy install dockpack.base_boost
+```
 
 # +boost_cflags?
 
